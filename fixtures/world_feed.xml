@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Global Dispatch News</title>
+    <link>https://globaldispatch.example.com</link>
+    <description>Global economy, climate change, trade, and diplomacy</description>
+    <item>
+      <title>Global Climate Summit Concludes With Historic Clean Energy Accord</title>
+      <link>https://globaldispatch.example.com/climate-summit-clean-energy-accord</link>
+      <description>Delegates from 140 countries reach a landmark agreement to triple renewable energy investments and phase out coal subsidies by 2030.</description>
+      <pubDate>Fri, 10 Oct 2026 09:00:00 GMT</pubDate>
+      <category>Climate</category>
+    </item>
+    <item>
+      <title>Central Banks Signal Interest Rate Cuts as Global Inflation Cools Rapidly</title>
+      <link>https://globaldispatch.example.com/central-banks-rate-cuts-inflation</link>
+      <description>Economic indicators show steady price stability, leading central banks to forecast interest rate reductions to stimulate sustainable economic growth.</description>
+      <pubDate>Fri, 10 Oct 2026 08:30:00 GMT</pubDate>
+      <category>Economy</category>
+    </item>
+    <item>
+      <title>Autonomous Cargo Fleets Begin Maritime Pacific Green Shipping Routes</title>
+      <link>https://globaldispatch.example.com/autonomous-cargo-fleets-pacific</link>
+      <description>Zero-emission autonomous container vessels complete their maiden trans-Pacific voyage, slashing maritime freight costs and emissions.</description>
+      <pubDate>Fri, 10 Oct 2026 07:15:00 GMT</pubDate>
+      <category>Trade &amp; Logistics</category>
+    </item>
+    <item>
+      <title>Global Semiconductor Alliance Expands Fabrication Hubs Across Three Continents</title>
+      <link>https://globaldispatch.example.com/semiconductor-fabrication-expansion</link>
+      <description>International supply chain partners inaugurate three gigafabs dedicated to high-precision 1nm chips for AI computation.</description>
+      <pubDate>Thu, 09 Oct 2026 19:40:00 GMT</pubDate>
+      <category>Economy</category>
+    </item>
+  </channel>
+</rss>

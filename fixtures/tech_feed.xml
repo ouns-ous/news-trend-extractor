@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>TechPulse News Feed</title>
+    <link>https://techpulse.example.com</link>
+    <description>Latest technology, AI, computing, and cybersecurity breakthroughs</description>
+    <language>en-us</language>
+    <item>
+      <title>Autonomous AI Agents Surge in Enterprise Software Automation</title>
+      <link>https://techpulse.example.com/ai-agents-enterprise-surge</link>
+      <description>Modern enterprises are deploying autonomous AI agents to automate software workflows, boosting productivity across software engineering teams.</description>
+      <pubDate>Fri, 10 Oct 2026 08:15:00 GMT</pubDate>
+      <category>Artificial Intelligence</category>
+      <dc:creator>Jane Doe</dc:creator>
+    </item>
+    <item>
+      <title>Quantum Computing Breakthrough: Researchers Achieve 10,000 Logical Qubits</title>
+      <link>https://techpulse.example.com/quantum-computing-breakthrough</link>
+      <description>Scientists announce a major breakthrough in quantum error correction, stabilizing ten thousand logical qubits at room temperature.</description>
+      <pubDate>Fri, 10 Oct 2026 07:30:00 GMT</pubDate>
+      <category>Quantum Computing</category>
+      <dc:creator>Alan Turing Institute</dc:creator>
+    </item>
+    <item>
+      <title>Major Cybersecurity Zero-Day Vulnerability Discovered in Cloud Hypervisors</title>
+      <link>https://techpulse.example.com/cloud-hypervisor-zero-day</link>
+      <description>Security researchers issue an urgent warning following the discovery of a critical remote code execution vulnerability impacting global cloud clusters.</description>
+      <pubDate>Fri, 10 Oct 2026 06:45:00 GMT</pubDate>
+      <category>Cybersecurity</category>
+      <dc:creator>Security Watch</dc:creator>
+    </item>
+    <item>
+      <title>Open-Source LLM Models Outperform Proprietary Systems on Coding Benchmarks</title>
+      <link>https://techpulse.example.com/open-source-llm-coding</link>
+      <description>A new generation of open-source artificial intelligence foundation models demonstrates record-breaking benchmark scores in python and systems coding.</description>
+      <pubDate>Fri, 10 Oct 2026 05:00:00 GMT</pubDate>
+      <category>Artificial Intelligence</category>
+      <dc:creator>Open Source Guild</dc:creator>
+    </item>
+    <item>
+      <title>Next-Gen Solid State Batteries Enter Commercial EV Production</title>
+      <link>https://techpulse.example.com/solid-state-batteries-ev</link>
+      <description>Automakers celebrate rapid battery density doubling with safe ceramic electrolyte chemistry, enabling 800-mile electric vehicle ranges.</description>
+      <pubDate>Thu, 09 Oct 2026 22:15:00 GMT</pubDate>
+      <category>Energy &amp; Hardware</category>
+      <dc:creator>Battery Insights</dc:creator>
+    </item>
+  </channel>
+</rss>

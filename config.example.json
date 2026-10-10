@@ -1,0 +1,84 @@
+{
+  "db_path": "news_vault.db",
+  "timeout_seconds": 10,
+  "user_agent": "NewsPulseBot/1.0 (+https://github.com/ouns-ous/news-trend-extractor)",
+  "min_keyword_length": 3,
+  "min_trend_frequency": 2,
+  "top_trends_count": 15,
+  "sources": [
+    {
+      "name": "Hacker News Frontpage",
+      "url": "https://news.ycombinator.com/rss",
+      "feed_type": "rss",
+      "category": "Technology",
+      "enabled": true,
+      "html_selector": null,
+      "max_items": 30
+    },
+    {
+      "name": "BBC News World",
+      "url": "http://feeds.bbci.co.uk/news/world/rss.xml",
+      "feed_type": "rss",
+      "category": "World",
+      "enabled": true,
+      "html_selector": null,
+      "max_items": 25
+    },
+    {
+      "name": "BBC News Technology",
+      "url": "http://feeds.bbci.co.uk/news/technology/rss.xml",
+      "feed_type": "rss",
+      "category": "Technology",
+      "enabled": true,
+      "html_selector": null,
+      "max_items": 25
+    },
+    {
+      "name": "ArXiv AI Preprints",
+      "url": "https://rss.arxiv.org/rss/cs.AI",
+      "feed_type": "rss",
+      "category": "Science",
+      "enabled": true,
+      "html_selector": null,
+      "max_items": 25
+    }
+  ],
+  "watchlists": {
+    "Artificial Intelligence": [
+      "ai",
+      "llm",
+      "deep learning",
+      "neural network",
+      "openai",
+      "agent",
+      "gpu"
+    ],
+    "Cybersecurity": [
+      "vulnerability",
+      "breach",
+      "zero-day",
+      "ransomware",
+      "malware",
+      "hack",
+      "cve"
+    ],
+    "Markets & Economy": [
+      "inflation",
+      "federal reserve",
+      "stock",
+      "interest rate",
+      "revenue",
+      "recession"
+    ]
+  },
+  "custom_stop_words": [
+    "said",
+    "also",
+    "new",
+    "one",
+    "two",
+    "years",
+    "time",
+    "week"
+  ]
+}
