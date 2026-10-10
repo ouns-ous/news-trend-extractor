@@ -20,6 +20,12 @@
   - Velocity scoring comparing current story frequency against baseline moving averages.
 - **Lexicon Sentiment & Urgency Polarity**:
   - Domain-weighted sentiment engine assessing positive breakthroughs vs. crisis/risk events with negation inversion handling.
+- **Interactive HTML5 & SVG Dashboard**:
+  - Generates standalone, responsive analytics dashboards with custom SVG Donut Charts, horizontal Category Bar Charts, Trending N-Gram Pill Clouds, and client-side instant filtering.
+- **Cross-Source Story Clustering**:
+  - Pairwise Jaccard lexical similarity engine grouping multi-outlet coverage of identical breaking events to analyze comparative perspectives.
+- **Continuous Monitoring Daemon**:
+  - Autonomous periodic scraping loop with alert triggers and audit trail logging.
 - **SQLite News Vault Storage**:
   - High-performance relational database with deterministic SHA-256 deduplication, category tagging, full-text search, and scrape run auditing.
 - **Watchlist & Alert Triggering**:
@@ -38,9 +44,12 @@ news-trend-extractor/
 │   ├── alerts.py            # Watchlist monitor & keyword trigger alerts
 │   ├── analyzer.py          # NLP n-grams, trend scoring, sentiment classifier
 │   ├── cli.py               # Command-line interface & subcommands router
+│   ├── clustering.py        # Cross-source event & story clustering engine
 │   ├── config.py            # Application & source configuration dataclasses
+│   ├── dashboard.py         # Standalone HTML5 & vector SVG dashboard renderer
 │   ├── models.py            # Article, TrendTopic, SentimentResult, Digest models
 │   ├── reporter.py          # Digest formatting (Markdown, JSON, CSV, Console)
+│   ├── scheduler.py         # Continuous periodic background monitoring daemon
 │   ├── scraper.py           # Multi-source scraper (RSS, Atom, HTML, Offline)
 │   └── storage.py           # SQLite persistence, deduplication, full-text search
 ├── fixtures/
@@ -52,7 +61,10 @@ news-trend-extractor/
 │   ├── test_alerts.py       # Watchlist alerting tests
 │   ├── test_analyzer.py     # NLP n-grams, stop-words, sentiment tests
 │   ├── test_cli.py          # End-to-end CLI command execution tests
+│   ├── test_clustering.py   # Pairwise similarity and clustering tests
+│   ├── test_dashboard.py    # HTML and SVG dashboard generation tests
 │   ├── test_models.py       # Article dataclass serialization tests
+│   ├── test_scheduler.py    # Background monitor daemon tests
 │   ├── test_scraper.py      # RSS, Atom, and HTML parser unit tests
 │   └── test_storage.py      # SQLite CRUD, deduplication, search tests
 ├── config.example.json      # Sample configuration profile
@@ -157,7 +169,35 @@ python main.py digest --format markdown -o digest.md
 
 Also supports `--format json`, `--format csv`, or `--format text`.
 
-### 6. Monitor Watchlist Alerts
+### 6. Interactive Visual HTML Dashboard
+
+Render an executive dashboard with animated SVG Donut & Bar Charts and live filterable article tables:
+
+```bash
+python main.py dashboard -o dashboard.html
+```
+
+### 7. Cross-Source Story Clustering
+
+Group multi-outlet coverage into cohesive event story clusters using lexical Jaccard analysis:
+
+```bash
+python main.py cluster --threshold 0.25
+```
+
+### 8. Continuous Background Polling Daemon
+
+Launch autonomous background polling to monitor news sources and watchlist alerts periodically:
+
+```bash
+# Run daemon polling every 60 seconds
+python main.py monitor --interval 60
+
+# Run in offline mode for testing
+python main.py monitor --interval 10 --runs 3 --offline
+```
+
+### 9. Monitor Watchlist Alerts
 
 Scan for triggers matching high-priority watchlist rules:
 
@@ -165,7 +205,7 @@ Scan for triggers matching high-priority watchlist rules:
 python main.py alerts
 ```
 
-### 7. View Vault Metrics
+### 10. View Vault Metrics
 
 Inspect database health, article counts, source distributions, and scrape run history:
 

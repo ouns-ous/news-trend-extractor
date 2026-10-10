@@ -18,8 +18,9 @@ htmlcov/
 venv/
 ENV/
 
-# Output digests
+# Output digests & dashboards
 output.md
 digest.json
 digest.csv
+dashboard.html
 config.json

@@ -20,6 +20,9 @@ from news_extractor.analyzer import TrendAnalyzer, SentimentAnalyzer
 from news_extractor.storage import NewsVault
 from news_extractor.alerts import WatchlistMonitor
 from news_extractor.reporter import DigestReporter
+from news_extractor.clustering import ClusterEngine
+from news_extractor.dashboard import DashboardGenerator
+from news_extractor.scheduler import NewsMonitor
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -62,6 +65,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_digest.add_argument("-o", "--output", type=str, help="Output file path (prints to stdout if omitted)")
     p_digest.add_argument("--hours", type=int, default=72, help="Timeframe window in hours")
+
+    # Command: dashboard
+    p_dash = subparsers.add_parser("dashboard", help="Generate interactive HTML5 & SVG visual analytics dashboard")
+    p_dash.add_argument("-o", "--output", default="dashboard.html", help="Destination HTML file path")
+    p_dash.add_argument("--hours", type=int, default=72, help="Timeframe window in hours")
+
+    # Command: cluster
+    p_cluster = subparsers.add_parser("cluster", help="Group articles into multi-source event clusters")
+    p_cluster.add_argument("--threshold", "-t", type=float, default=0.25, help="Similarity threshold (0.0 to 1.0)")
+    p_cluster.add_argument("--hours", type=int, default=72, help="Timeframe window in hours")
+
+    # Command: monitor
+    p_mon = subparsers.add_parser("monitor", help="Run automated periodic background monitoring daemon")
+    p_mon.add_argument("--interval", "-i", type=int, default=60, help="Interval between runs in seconds")
+    p_mon.add_argument("--runs", "-r", type=int, default=None, help="Maximum number of cycles (default: continuous)")
+    p_mon.add_argument("--offline", action="store_true", help="Use local mock fixtures instead of network")
 
     # Command: search
     p_search = subparsers.add_parser("search", help="Search ingested articles by keyword or phrase")
@@ -223,6 +242,89 @@ def handle_digest(args: argparse.Namespace, config: AppConfig) -> int:
     return 0
 
 
+def handle_dashboard(args: argparse.Namespace, config: AppConfig) -> int:
+    """Generate interactive HTML5 and SVG dashboard."""
+    analyzer = TrendAnalyzer(
+        custom_stop_words=config.custom_stop_words,
+        min_word_len=config.min_keyword_length,
+        min_freq=config.min_trend_frequency,
+    )
+    sentiment_engine = SentimentAnalyzer()
+    monitor = WatchlistMonitor(config.watchlists)
+
+    with NewsVault(config.db_path) as vault:
+        articles = vault.get_articles(limit=1000, timeframe_hours=args.hours)
+
+    if not articles:
+        print("[INFO] No articles found in vault. Run 'python main.py fetch' first.")
+        return 0
+
+    trends = analyzer.compute_trends(articles, top_n=config.top_trends_count)
+    sentiment = sentiment_engine.summarize(articles)
+    alerts = monitor.evaluate_all(articles)
+
+    src_dist = {}
+    cat_dist = {}
+    for a in articles:
+        src_dist[a.source] = src_dist.get(a.source, 0) + 1
+        cat_dist[a.category] = cat_dist.get(a.category, 0) + 1
+
+    digest = Digest(
+        generated_at=_now(),
+        timeframe_hours=args.hours,
+        total_articles=len(articles),
+        top_trends=trends,
+        sentiment=sentiment,
+        source_breakdown=src_dist,
+        category_breakdown=cat_dist,
+        alerts=alerts,
+    )
+
+    out_path = DashboardGenerator.export(digest, articles, args.output)
+    print(f"[OK] Visual HTML5 & SVG dashboard generated successfully at: {out_path}")
+    return 0
+
+
+def handle_cluster(args: argparse.Namespace, config: AppConfig) -> int:
+    """Cluster articles into cross-source story groupings."""
+    with NewsVault(config.db_path) as vault:
+        articles = vault.get_articles(limit=1000, timeframe_hours=args.hours)
+
+    if not articles:
+        print("[INFO] No articles found in vault. Run 'python main.py fetch' first.")
+        return 0
+
+    engine = ClusterEngine(similarity_threshold=args.threshold)
+    clusters = engine.cluster_articles(articles)
+
+    print("\n" + "=" * 72)
+    print(f" [CLUSTERS] IDENTIFIED {len(clusters)} STORY EVENT CLUSTERS")
+    print("=" * 72)
+
+    for i, c in enumerate(clusters, start=1):
+        sources = ", ".join(c.sources)
+        print(f"Cluster #{i}: \"{c.representative_title}\"")
+        print(f"  Outlets: {sources} | Size: {len(c.articles)} articles | Avg Sentiment: {c.average_sentiment:+.2f}")
+        if c.common_keywords:
+            print(f"  Shared Keywords: {', '.join(c.common_keywords)}")
+        print()
+
+    print("=" * 72 + "\n")
+    return 0
+
+
+def handle_monitor(args: argparse.Namespace, config: AppConfig) -> int:
+    """Run automated background polling daemon."""
+    daemon = NewsMonitor(
+        config=config,
+        interval_seconds=args.interval,
+        offline=args.offline,
+        alert_callback=lambda alerts: print(f"  [ALERT-DISPATCH] {len(alerts)} high-priority alert(s) triggered!"),
+    )
+    daemon.start(max_cycles=args.runs)
+    return 0
+
+
 def handle_search(args: argparse.Namespace, config: AppConfig) -> int:
     """Search vault for articles matching a query."""
     with NewsVault(config.db_path) as vault:
@@ -321,6 +423,12 @@ def main(argv: Optional[List[str]] = None) -> int:
         return handle_trends(args, config)
     elif args.command == "digest":
         return handle_digest(args, config)
+    elif args.command == "dashboard":
+        return handle_dashboard(args, config)
+    elif args.command == "cluster":
+        return handle_cluster(args, config)
+    elif args.command == "monitor":
+        return handle_monitor(args, config)
     elif args.command == "search":
         return handle_search(args, config)
     elif args.command == "alerts":

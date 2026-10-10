@@ -69,7 +69,26 @@ class TestCLI(unittest.TestCase):
             self.assertEqual(code_alerts, 0)
             self.assertIn("Active Watchlist Alerts", mock_out.getvalue())
 
-        # 6. Stats
+        # 6. Dashboard
+        dash_file = Path(self.temp_dir.name) / "dash.html"
+        code_dash = main(["-c", str(self.config_path), "dashboard", "-o", str(dash_file)])
+        self.assertEqual(code_dash, 0)
+        self.assertTrue(dash_file.exists())
+        self.assertIn("NewsPulse", dash_file.read_text(encoding="utf-8"))
+
+        # 7. Cluster
+        with patch("sys.stdout", new_callable=io.StringIO) as mock_out:
+            code_cluster = main(["-c", str(self.config_path), "cluster"])
+            self.assertEqual(code_cluster, 0)
+            self.assertIn("STORY EVENT CLUSTERS", mock_out.getvalue())
+
+        # 8. Monitor (1 cycle offline)
+        with patch("sys.stdout", new_callable=io.StringIO) as mock_out:
+            code_mon = main(["-c", str(self.config_path), "monitor", "--runs", "1", "--offline"])
+            self.assertEqual(code_mon, 0)
+            self.assertIn("MONITOR", mock_out.getvalue())
+
+        # 9. Stats
         with patch("sys.stdout", new_callable=io.StringIO) as mock_out:
             code_stats = main(["-c", str(self.config_path), "stats"])
             self.assertEqual(code_stats, 0)
